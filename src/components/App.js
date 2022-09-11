@@ -14,10 +14,10 @@ export default function App(){
         <BrowserRouter>
             <Routes>
                 <Route path={"/"} element={<SignIn/>}></Route>
-                <Route path={"/signUp"} element={<SignUp/>}></Route>
+                <Route path={"/sign-up"} element={<SignUp/>}></Route>
                 <Route path={"/transactions"} element={<Transactions/>} ></Route>
-                <Route path={"newEntry"} element={<NewEntry/>} ></Route>
-                <Route path={"/newExit"} element={<NewExit/>} ></Route>
+                <Route path={"new-entry"} element={<NewEntry/>} ></Route>
+                <Route path={"/new-exit"} element={<NewExit/>} ></Route>
             </Routes>
         </BrowserRouter>
     );

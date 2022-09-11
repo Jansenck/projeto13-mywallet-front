@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Container from "./common/Container";
 import Button from "./common/Button";
 
-export default function NewEntry(){
+export default function NewExit(){
     return(
         <TransactionsContainer>
             <Header>

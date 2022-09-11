@@ -1,24 +1,33 @@
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 import Container from "./common/Container";
 import Button from "./common/Button";
 import Tittle from "./common/Tittle";
 
 export default function SignIn(){
+
+    const [ loginData, setLoginData ] = useState({email: "", password: ""});
+
+    function login(event){
+        event.preventDefault();
+        console.log(loginData)
+    }
+
     return(
         <Container>
             <LoginContainer>
                 <Tittle>My Wallet</Tittle>
-                <Form>
-                    <input type="email" placeholder="E-mail"/>
-                    <input type="password" placeholder="Senha"/>
-                    <Button>
+                <Form onSubmit={login}>
+                    <input required type="email" placeholder="E-mail" onChange={e => setLoginData({...loginData, email: e.target.value})}/>
+                    <input required type="password" placeholder="Senha" onChange={e => setLoginData({...loginData, password: e.target.value})}/>
+                    <Button type="submit">
                         <p>Entrar</p>
                     </Button>
                 </Form>
                 <Link 
-                    to="/signUp" 
+                    to="/sign-up" 
                     style={{
                         textDecoration: "none",
                         fontSize: "15px",

@@ -1,6 +1,7 @@
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Container from "./common/Container";
-import { useState } from 'react';
 
 export default function Transactions(){
 
@@ -10,7 +11,9 @@ export default function Transactions(){
         <NewContainer>
             <Header>
                 <User>Olá, Fulano</User>
-                <ion-icon name="exit-outline"></ion-icon>          
+                <Link to="/">
+                    <ion-icon name="exit-outline"></ion-icon>          
+                </Link>
             </Header>
             <History transactions={transactions.length > 0}>
                 {
@@ -40,14 +43,14 @@ export default function Transactions(){
                 }
             </History>
             <TransactionsTypes>
-                <NewEntry>
+                <Link to="/new-entry">
                     <ion-icon name="add-circle-outline"></ion-icon>
                     <p>Nova <br></br>entrada</p>
-                </NewEntry>
-                <NewExit>
+                </Link>
+                <Link to="/new-exit">
                     <ion-icon name="remove-circle-outline"></ion-icon>
                     <p>Nova <br></br>saída</p>
-                </NewExit>
+                </Link>
             </TransactionsTypes>
         </NewContainer>
     );
@@ -59,16 +62,6 @@ const NewContainer = styled(Container)`
     flex-direction: column;
 `;
 
-
-/* const LoginContainer = styled.div`
-    height: 40%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-`; */
-
 const Header = styled.div`
     height: 30px;
     width: 100%;
@@ -79,6 +72,7 @@ const Header = styled.div`
     color: #FFFFFF;
         ion-icon{
             font-size: 30px;
+            color: #FFFFFF;
         }
 `;
 const User = styled.p`
@@ -131,36 +125,20 @@ const TransactionsTypes = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: space-around;
-`;
-const NewEntry = styled.div`
-    height: 100%;
-    width: 47%;
-    background-color: #A328D6;
-    border-radius: 5px;
-    padding: 10px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-size: 30px;
-    color: #FFFFFF;
-        p{
-            font-size: 20px;
-            font-weight: 700;
+        a{
+            height: 100%;
+            width: 47%;
+            background-color: #A328D6;
+            border-radius: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 30px;
+            color: #FFFFFF;
+            text-decoration: none;
         }
-`;
-const NewExit = styled.div`
-    height: 100%;
-    width: 47%;
-    background-color: #A328D6;
-    border-radius: 5px;
-    padding: 10px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-size: 30px;
-    color: #FFFFFF;
         p{
             font-size: 20px;
             font-weight: 700;
