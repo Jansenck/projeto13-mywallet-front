@@ -1,19 +1,51 @@
+import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
+import UserContexts from "../contexts/UserContexts";
 import Container from "./common/Container";
 import Button from "./common/Button";
 
 export default function NewEntry(){
+
+    const navigate = useNavigate();
+    const{ token } = useContext(UserContexts);
+    const [ newEntryData, setNewEntryData ] = useState({value: null, description: null});
+
+    function sendNewEntry(event){
+
+        event.preventDefault();
+        const { value, description } = newEntryData;
+        if(!value || !description){
+            return window.alert("Preencha os campos Valor e Descrição!");
+        }
+
+        const body = {type: "entry", value, description};
+        const config = {
+            headers:{
+                "Authorization" : `Bearer ${token}`
+            }
+        };
+        const promise = axios.post("http://localhost:5000/new-entry", body, config);
+        promise.then(() => {
+            const refreshNewEntryData = {value: null, description: null};
+            setNewEntryData(refreshNewEntryData);
+            navigate("/transactions");
+        });
+        promise.catch(error => window.alert(error));
+    }
+
     return(
         <TransactionsContainer>
             <Header>
                 <User>Nova entrada</User>        
             </Header>
             <LoginContainer>
-                <Form>
-                    <input type="text" placeholder="Valor"/>
-                    <input type="text" placeholder="Descrição"/>
-                    <Button>
+                <Form onSubmit={sendNewEntry}>
+                    <input type="text" placeholder="Valor" onChange={e => setNewEntryData({...newEntryData, value: e.target.value})}/>
+                    <input type="text" placeholder="Descrição" onChange={e => setNewEntryData({...newEntryData, description: e.target.value})}/>
+                    <Button type="submit">
                         <p>Salva entrada</p>
                     </Button>
                 </Form>

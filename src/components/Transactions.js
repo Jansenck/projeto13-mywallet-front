@@ -1,11 +1,28 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styled from "styled-components";
+import dayjs from "dayjs";
+import axios from "axios";
+
+import UserContexts from '../contexts/UserContexts';
 import Container from "./common/Container";
 
 export default function Transactions(){
 
-    const [transactions, setTransactions] = useState([1,2,3]);
+    const today = dayjs().locale("br").format("DD/MM");
+    const [transactions, setTransactions] = useState([]);
+    const { token } = useContext(UserContexts);
+
+    useEffect(() => {
+        const config = {
+            headers:{
+                "Authorization" : `Bearer ${token}`
+            }
+        };
+        const promise = axios.get("http://localhost:5000/transactions", config);
+        promise.then(res => setTransactions([res.data]));
+        promise.catch(error => console.log(error.response.data));
+    })
 
     return(
         <NewContainer>
@@ -20,18 +37,15 @@ export default function Transactions(){
                     transactions.length > 0?
                     <>
                         <AccountTransactions>
-                            <li>
-                                <p>30/09 <span>transação</span></p>
-                                <p>250,49</p>
-                            </li>
-                            <li>
-                                <p>30/09 <span>transação</span></p>
-                                <p>250,49</p>
-                            </li>
-                            <li>
-                                <p>30/09 <span>transação</span></p>
-                                <p>250,49</p>
-                            </li>
+                            {transactions.map( (transaction, index) => {
+                                const { value, description, type } = transaction[0];
+                                return(
+                                    <li key={index} typetransaction={type}>
+                                        <p>{today} <span>{description}</span></p>
+                                        <p style={{color: type === "entry"? "#03AC00" : "#C70000"}}>{value}</p>
+                                    </li>
+                                )
+                            })}
                         </AccountTransactions>
                         <CashBalance>
                             <p><span>SALDO</span></p>
@@ -108,6 +122,7 @@ const AccountTransactions = styled.ul`
         span{
             color: #000000;
         }
+        
 `;
 const CashBalance = styled.div`
     display: flex;

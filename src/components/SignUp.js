@@ -12,11 +12,12 @@ export default function SignUp(){
 
     const navigate = useNavigate();
     const [ registrationData, setRegistrationData ] = useState({
-        name: "",
-        email: "",
-        password: "",
-        passwordConfirmation: ""
+        name: null,
+        email: null,
+        password: null,
+        passwordConfirmation: null
     });
+    
     function sendRegistration(event){
         event.preventDefault();
         const {name, email, password, passwordConfirmation} = registrationData;
@@ -24,8 +25,10 @@ export default function SignUp(){
             return window.alert("Senhas não compatíveis!");
         }
         const body = {name, email, password};
+        console.log(body)
         const promise = axios.post("http://localhost:5000/sign-up", body);
-        promise.then(() => navigate("/"));
+        promise.then(() => {
+            navigate("/")});
         promise.catch(error => {
             window.alert(error);
         });
