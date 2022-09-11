@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 import Container from "./common/Container";
 import Button from "./common/Button";
@@ -8,11 +9,24 @@ import Tittle from "./common/Tittle";
 
 export default function SignIn(){
 
-    const [ loginData, setLoginData ] = useState({email: "", password: ""});
+    const [ loginData, setLoginData ] = useState({email: null, password: null});
+    const [ token, setToken ] = useState(null);
 
     function login(event){
+        
         event.preventDefault();
-        console.log(loginData)
+        const { email, password } = loginData;
+        
+        if(email === null || password === null){
+            return window.alert("Preencha os campos email e senha!");
+        }
+        const body = {email, password};
+        const promise = axios.post("http://localhost:5000/sign-in", body);
+        promise.then(res => {
+            const { token } = res.data;
+            setToken(token);
+        });
+        promise.catch(error => window.alert(error));
     }
 
     return(
