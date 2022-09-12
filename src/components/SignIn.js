@@ -11,7 +11,7 @@ import Tittle from "./common/Tittle";
 export default function SignIn(){
 
     const [ loginData, setLoginData ] = useState({email: null, password: null});
-    const { setToken } = useContext(UserContexts);
+    const { setToken, setUserName } = useContext(UserContexts);
     const navigate = useNavigate();
 
     function login(event){
@@ -25,8 +25,9 @@ export default function SignIn(){
         const body = {email, password};
         const promise = axios.post("http://localhost:5000/sign-in", body);
         promise.then(res => {
-            const  token  = res.data;
+            const  {token, name}  = res.data;
             setToken(token);
+            setUserName(name);
             navigate("/transactions");
         });
         promise.catch(error => window.alert(error));

@@ -10,8 +10,10 @@ import Container from "./common/Container";
 export default function Transactions(){
 
     const today = dayjs().locale("br").format("DD/MM");
-    const [transactions, setTransactions] = useState([]);
-    const { token } = useContext(UserContexts);
+    const [ transactions, setTransactions ] = useState([]);
+    const [ balance, setBalance ] = useState(0);
+    //const [ transactionValues, setTransactionValues ] = useState([]);
+    const { token, userName } = useContext(UserContexts);
 
     useEffect(() => {
         const config = {
@@ -20,14 +22,28 @@ export default function Transactions(){
             }
         };
         const promise = axios.get("http://localhost:5000/transactions", config);
-        promise.then(res => setTransactions([res.data]));
+        promise.then(res => {
+            setTransactions([res.data]);
+            let updateBalance = Number(0);
+
+            res.data.forEach(transaction => {
+                const convertValue = transaction.value.replace(",", ".");
+                transaction.type === "entry"?
+                    updateBalance += parseFloat(convertValue)
+                :
+                    updateBalance -= parseFloat(convertValue);
+            });
+            const convertValue = updateBalance.toString().replace(".", ",");
+            setBalance(convertValue);
+        });
         promise.catch(error => console.log(error.response.data));
-    })
+
+    }, [ transactions]);
 
     return(
         <NewContainer>
             <Header>
-                <User>Olá, Fulano</User>
+                <User>{userName}</User>
                 <Link to="/">
                     <ion-icon name="exit-outline"></ion-icon>          
                 </Link>
@@ -37,8 +53,8 @@ export default function Transactions(){
                     transactions.length > 0?
                     <>
                         <AccountTransactions>
-                            {transactions.map( (transaction, index) => {
-                                const { value, description, type } = transaction[0];
+                            {transactions[0].map( (transaction, index) => {
+                                const { value, description, type } = transaction;
                                 return(
                                     <li key={index} typetransaction={type}>
                                         <p>{today} <span>{description}</span></p>
@@ -49,7 +65,7 @@ export default function Transactions(){
                         </AccountTransactions>
                         <CashBalance>
                             <p><span>SALDO</span></p>
-                            <p>2894,39</p>
+                            <p>{balance}</p>
                         </CashBalance>
                     </>
                     :

@@ -1,15 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState , useContext } from "react";
 
 import styled from "styled-components";
 import axios from "axios";
 
+import UserContexts from "../contexts/UserContexts";
 import Container from "./common/Container";
 import Button from "./common/Button";
 import Tittle from "./common/Tittle";
 
 export default function SignUp(){
 
+    const { setUserName } = useContext(UserContexts);
     const navigate = useNavigate();
     const [ registrationData, setRegistrationData ] = useState({
         name: null,
@@ -25,9 +27,9 @@ export default function SignUp(){
             return window.alert("Senhas não compatíveis!");
         }
         const body = {name, email, password};
-        console.log(body)
         const promise = axios.post("http://localhost:5000/sign-up", body);
         promise.then(() => {
+            setUserName(name);
             navigate("/")});
         promise.catch(error => {
             window.alert(error);

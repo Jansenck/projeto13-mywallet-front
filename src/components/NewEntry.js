@@ -43,8 +43,8 @@ export default function NewEntry(){
             </Header>
             <LoginContainer>
                 <Form onSubmit={sendNewEntry}>
-                    <input type="text" placeholder="Valor" onChange={e => setNewEntryData({...newEntryData, value: e.target.value})}/>
-                    <input type="text" placeholder="Descrição" onChange={e => setNewEntryData({...newEntryData, description: e.target.value})}/>
+                    <input required type="text" placeholder="Valor" onChange={e => setNewEntryData({...newEntryData, value: e.target.value})}/>
+                    <input required type="text" placeholder="Descrição" onChange={e => setNewEntryData({...newEntryData, description: e.target.value})}/>
                     <Button type="submit">
                         <p>Salva entrada</p>
                     </Button>

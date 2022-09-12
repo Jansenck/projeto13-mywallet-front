@@ -1,19 +1,51 @@
+import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
 import styled from "styled-components";
 
+import axios from "axios";
+
+import UserContexts from "../contexts/UserContexts";
 import Container from "./common/Container";
 import Button from "./common/Button";
 
 export default function NewExit(){
+
+    const navigate = useNavigate();
+    const { token } = useContext(UserContexts);
+    const [ newExitData, setNewExitData ] = useState({value: null, description: null});
+    
+    function sendNewExitTransaction(event){
+
+        event.preventDefault();
+        const { value, description } = newExitData;
+        if(!value || !description){
+            return window.alert("Preencha os campos Value e Descrição corretamente!");
+        }
+        const body = {type: "exit", value, description};
+        const config = {
+            headers: {
+                "Authorization" : `Bearer ${token}`
+            }
+        }
+        const promise = axios.post("http://localhost:5000/new-exit", body, config);
+        promise.then(() => {
+            const refreshNewExitData = {value: null, description: null}
+            setNewExitData(refreshNewExitData);
+            navigate("/transactions");
+        });
+        promise.catch(error => window.alert(error));
+    }
+
     return(
         <TransactionsContainer>
             <Header>
                 <User>Nova saída</User>        
             </Header>
             <LoginContainer>
-                <Form>
-                    <input type="text" placeholder="Valor"/>
-                    <input type="text" placeholder="Descrição"/>
-                    <Button>
+                <Form onSubmit={sendNewExitTransaction}>
+                    <input required type="text" placeholder="Valor" onChange={e => setNewExitData({...newExitData, value: e.target.value})}/>
+                    <input required type="text" placeholder="Descrição" onChange={e => setNewExitData({...newExitData, description: e.target.value})}/>
+                    <Button type="submit">
                         <p>Salvar saída</p>
                     </Button>
                 </Form>

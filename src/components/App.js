@@ -14,9 +14,8 @@ import "../css/style.css";
 export default function App(){
 
     const [ token, setToken ] = useState(null);
-    const userContextData = {token, setToken};
-
-    console.log(token)
+    const [ userName, setUserName ] = useState(null);
+    const userContextData = {token, setToken, userName, setUserName};
 
     return(
         <UserContexts.Provider  value={userContextData}>
