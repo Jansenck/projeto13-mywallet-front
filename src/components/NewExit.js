@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import styled from "styled-components";
 
 import axios from "axios";
+import dayjs from "dayjs";
 
 import UserContexts from "../contexts/UserContexts";
 import Container from "./common/Container";
@@ -11,6 +12,7 @@ import Button from "./common/Button";
 export default function NewExit(){
 
     const navigate = useNavigate();
+    const today = dayjs().locale("br").format("DD/MM");
     const { token } = useContext(UserContexts);
     const [ newExitData, setNewExitData ] = useState({value: null, description: null});
     
@@ -21,7 +23,7 @@ export default function NewExit(){
         if(!value || !description){
             return window.alert("Preencha os campos Value e Descrição corretamente!");
         }
-        const body = {type: "exit", value, description};
+        const body = {date: today, type: "exit", value, description};
         const config = {
             headers: {
                 "Authorization" : `Bearer ${token}`

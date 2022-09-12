@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import styled from "styled-components";
+
+import dayjs from "dayjs";
 import axios from "axios";
 
 import UserContexts from "../contexts/UserContexts";
@@ -10,6 +12,7 @@ import Button from "./common/Button";
 export default function NewEntry(){
 
     const navigate = useNavigate();
+    const today = dayjs().locale("br").format("DD/MM");
     const{ token } = useContext(UserContexts);
     const [ newEntryData, setNewEntryData ] = useState({value: null, description: null});
 
@@ -21,7 +24,7 @@ export default function NewEntry(){
             return window.alert("Preencha os campos Valor e Descrição!");
         }
 
-        const body = {type: "entry", value, description};
+        const body = {date: today, type: "entry", value, description};
         const config = {
             headers:{
                 "Authorization" : `Bearer ${token}`

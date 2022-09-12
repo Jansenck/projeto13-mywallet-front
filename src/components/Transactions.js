@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from "styled-components";
-import dayjs from "dayjs";
 import axios from "axios";
 
 import UserContexts from '../contexts/UserContexts';
@@ -9,10 +8,8 @@ import Container from "./common/Container";
 
 export default function Transactions(){
 
-    const today = dayjs().locale("br").format("DD/MM");
     const [ transactions, setTransactions ] = useState([]);
     const [ balance, setBalance ] = useState(0);
-    //const [ transactionValues, setTransactionValues ] = useState([]);
     const { token, userName } = useContext(UserContexts);
 
     useEffect(() => {
@@ -33,12 +30,11 @@ export default function Transactions(){
                 :
                     updateBalance -= parseFloat(convertValue);
             });
-            const convertValue = updateBalance.toString().replace(".", ",");
+            const convertValue = updateBalance.toFixed(2).replace(".", ",");
             setBalance(convertValue);
         });
-        promise.catch(error => console.log(error.response.data));
-
-    }, [ transactions]);
+        promise.catch(error => window.alert(error.response.data));
+    });
 
     return(
         <NewContainer>
@@ -54,10 +50,10 @@ export default function Transactions(){
                     <>
                         <AccountTransactions>
                             {transactions[0].map( (transaction, index) => {
-                                const { value, description, type } = transaction;
+                                const { value, description, type, date } = transaction;
                                 return(
                                     <li key={index} typetransaction={type}>
-                                        <p>{today} <span>{description}</span></p>
+                                        <p>{date} <span>{description}</span></p>
                                         <p style={{color: type === "entry"? "#03AC00" : "#C70000"}}>{value}</p>
                                     </li>
                                 )
